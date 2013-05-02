@@ -5,7 +5,7 @@ Call igraph with ease from Mathematica through RLink.
 
 ###Installation
 
-Drop `IGraphR.m` in this directory:
+Drop `IGraphR.m` into this directory:
 
     SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]
     
@@ -17,7 +17,7 @@ First, make sure that you are using an R installation that has the igraph packag
 
     REvaluate["install.packages('igraph')"]
     
-**On OS X**, you'll need to use an external R installation.  First, [download and install R](http://cran.rstudio.com).  Start it up and install igraph using the R command `install.packages('igraph')`.  Then in Mathematica, do 
+**On OS X**, you'll need to use an external R installation.  First, [download and install R](http://cran.rstudio.com).  Start it up and install igraph using the R command `install.packages('igraph')`.  Then in Mathematica load RLink and connect to the external R version *before* you load ``IGraphR` ``:
 
 ```
 Needs["RLink`"]
@@ -42,3 +42,7 @@ Out[]= {2.}
 In[]:= IGraph["barabasi.game"][10]
 Out[]= --Graph--
 ```
+
+###Known issues
+
+Only graphs whose vertices are named as 1, 2, 3, … are supported.

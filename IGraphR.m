@@ -23,9 +23,9 @@ RDataTypeRegister["IGraphEdgeList",
 			RObject[List@@@EdgeList[g],
 				RAttributes["mmaDirectedGraph" :> {d}]]
 		],
-	o_RObject /; (RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
-	o:RObject[data_, _RAttributes] /; (RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
-		If[First@RExtractAttribute[o, "mmaDirectedGraph"],
+	o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
+	o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
+		If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"],
 			Graph[DirectedEdge @@@ data],
 			Graph[UndirectedEdge @@@ data]]
 ]

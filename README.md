@@ -1,7 +1,7 @@
 IGraphR
 =======
 
-Call igraph with ease from Mathematica through [RLink](http://reference.wolfram.com/mathematica/RLink/guide/RLink.html).
+Call [igraph](http://igraph.sourceforge.net/) with ease from Mathematica through [RLink](http://reference.wolfram.com/mathematica/RLink/guide/RLink.html).
 
 ###Installation
 

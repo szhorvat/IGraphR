@@ -1,11 +1,11 @@
 IGraphR
 =======
 
-Call [igraph](http://igraph.sourceforge.net/) with ease from Mathematica through [RLink](http://reference.wolfram.com/mathematica/RLink/guide/RLink.html).
+Call [igraph](http://igraph.org/) with ease from Mathematica through [RLink](http://reference.wolfram.com/mathematica/RLink/guide/RLink.html).  RLink is available in Mathematica 9 or later.
 
 ###Installation
 
-Drop `IGraphR.m` into this directory:
+Drop `IGraphR.m` into the directory opened by this command:
 
     SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]
     
@@ -17,7 +17,7 @@ First, make sure that you are using an R installation that has the igraph packag
 
     REvaluate["install.packages('igraph')"]
     
-**On OS X**, you'll need to use an external R installation.  First, [download and install R](http://cran.rstudio.com).  Start it up and install igraph using the R command `install.packages('igraph')`.  Then in Mathematica load RLink and connect to the external R version *before* you load ``IGraphR` ``:
+**On OS X**, you'll need to use an external R installation.  First, [download and install the official R distribution](http://www.r-project.org/) (other distributions may or may not work with RLink).  Start it up and install igraph using the R command `install.packages('igraph')`.  Then in Mathematica load RLink and connect to the external R version *before* you load ``IGraphR` ``:
 
 ```
 Needs["RLink`"]
@@ -28,6 +28,8 @@ SetEnvironment[
 
 InstallR["RHomeLocation" -> "/Library/Frameworks/R.Framework/Resources"];
 ```
+
+(more information [here](http://mathematica.stackexchange.com/a/43732/12))
 
 Now you are ready to load ``IGraphR` ``:
 

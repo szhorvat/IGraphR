@@ -24,9 +24,15 @@ Needs["RLink`"]
 
 SetEnvironment[
  "DYLD_LIBRARY_PATH" -> 
-  "/Library/Frameworks/R.Framework/Resources/lib"];
+  "/Library/Frameworks/R.framework/Resources/lib"];
 
-InstallR["RHomeLocation" -> "/Library/Frameworks/R.Framework/Resources"];
+InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources"];
+```
+
+Verify that the expected version of R is being used with
+
+```
+REvaluate["R.version.string"]
 ```
 
 (more information [here](http://mathematica.stackexchange.com/a/43732/12))

@@ -25,8 +25,18 @@ Needs["RLink`"]
 SetEnvironment[
  "DYLD_LIBRARY_PATH" -> 
   "/Library/Frameworks/R.framework/Resources/lib"];
+```
 
+For Mathematica 9.0.1 and 10.0.0, use
+
+```
 InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources"];
+```
+
+For Mathematica 10.0.1, it is also necessary to specify the R version, e.g.:
+
+```
+InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources", "RVersion" -> "3.1"];
 ```
 
 Verify that the expected version of R is being used with

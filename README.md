@@ -3,6 +3,8 @@ IGraphR
 
 Call [igraph](http://igraph.org/) with ease from Mathematica through [RLink](http://reference.wolfram.com/mathematica/RLink/guide/RLink.html).  RLink is available in Mathematica 9 or later.
 
+See a short IGraphR tutorial [here](http://www3.nd.edu/~szhorvat/pelican/using-igraph-from-mathematica.html).
+
 ###Installation
 
 Drop `IGraphR.m` into the directory opened by this command:

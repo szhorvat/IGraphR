@@ -9,51 +9,51 @@ Begin["`Private`"]
 
 
 Check[
-	InstallR[];
-	REvaluate["library(igraph)"]
-    ,
-    Message[IGraph::igraph];
-	Abort[]
+  InstallR[];
+  REvaluate["library(igraph)"]
+	,
+	Message[IGraph::igraph];
+  Abort[]
 ]
 
 RDataTypeRegister["IGraphEdgeList",
-	_?GraphQ,
-	g_?GraphQ :>
-		With[{d=DirectedGraphQ[g]},
-			RObject[List@@@EdgeList[g],
-				RAttributes["mmaDirectedGraph" :> {d}]]
-		],
-	o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
-	o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
-		With[
-			{vertices = Range@First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexCount"],
-			 edges = Partition[data, 2]}
-			,
-			If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"],
-				Graph[vertices, DirectedEdge @@@ edges],
-				Graph[vertices, UndirectedEdge @@@ edges]
-			]
-		]
+  _?GraphQ,
+  g_?GraphQ :>
+    With[{d=DirectedGraphQ[g]},
+      RObject[List@@@EdgeList[g],
+        RAttributes["mmaDirectedGraph" :> {d}]]
+    ],
+  o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
+  o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
+    With[
+      {vertices = Range@First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexCount"],
+       edges = Partition[data, 2]}
+      ,
+      If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"],
+        Graph[vertices, DirectedEdge @@@ edges],
+        Graph[vertices, UndirectedEdge @@@ edges]
+      ]
+    ]
 ]
 
 iIGraph = 
-	RFunction["function (fun, args) {
-	  res <- do.call(fun,
-	          lapply(
-	            args,
-	            function (x)
-	              if (is.null(attr(x, 'mmaDirectedGraph', exact=T))) x
-	              else graph.edgelist(x, directed=attr(x, 'mmaDirectedGraph'))
-	          )
-	  )
-	  if (is.igraph(res)) {
-	    el <- as.integer(get.edgelist(res, names=F))
-	    attr(el, 'mmaDirectedGraph') <- is.directed(res)
-	    attr(el, 'mmaVertexCount') <- vcount(res)
-	    el
-	  }
-	  else res
-	}"];
+  RFunction["function (fun, args) {
+    res <- do.call(fun,
+            lapply(
+              args,
+              function (x)
+                if (is.null(attr(x, 'mmaDirectedGraph', exact=T))) x
+                else graph.edgelist(x, directed=attr(x, 'mmaDirectedGraph'))
+            )
+    )
+    if (is.igraph(res)) {
+      el <- as.integer(get.edgelist(res, names=F))
+      attr(el, 'mmaDirectedGraph') <- is.directed(res)
+      attr(el, 'mmaVertexCount') <- vcount(res)
+      el
+    }
+    else res
+  }"];
 
 IGraph[fun_String][args___] :=
     iIGraph[RFunction[fun],

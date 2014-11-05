@@ -18,16 +18,22 @@ Check[
 
 RDataTypeRegister["IGraphEdgeList",
 	_?GraphQ,
-	g_?GraphQ :> 
+	g_?GraphQ :>
 		With[{d=DirectedGraphQ[g]},
 			RObject[List@@@EdgeList[g],
 				RAttributes["mmaDirectedGraph" :> {d}]]
 		],
 	o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
 	o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
-		If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"],
-			Graph[DirectedEdge @@@ data],
-			Graph[UndirectedEdge @@@ data]]
+		With[
+			{vertices = Range@First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexCount"],
+			 edges = Partition[data, 2]}
+			,
+			If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"],
+				Graph[vertices, DirectedEdge @@@ edges],
+				Graph[vertices, UndirectedEdge @@@ edges]
+			]
+		]
 ]
 
 iIGraph = 
@@ -41,8 +47,9 @@ iIGraph =
 	          )
 	  )
 	  if (is.igraph(res)) {
-	    el <- get.edgelist(res)
+	    el <- as.integer(get.edgelist(res, names=F))
 	    attr(el, 'mmaDirectedGraph') <- is.directed(res)
+	    attr(el, 'mmaVertexCount') <- vcount(res)
 	    el
 	  }
 	  else res

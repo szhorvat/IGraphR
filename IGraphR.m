@@ -11,17 +11,18 @@ Begin["`Private`"]
 Check[
   InstallR[];
   REvaluate["library(igraph)"]
-	,
-	Message[IGraph::igraph];
+  ,
+  Message[IGraph::igraph];
   Abort[]
 ]
 
 RDataTypeRegister["IGraphEdgeList",
   _?GraphQ,
   g_?GraphQ :>
-    With[{d=DirectedGraphQ[g]},
-      RObject[List@@@EdgeList[g],
-        RAttributes["mmaDirectedGraph" :> {d}]]
+    With[{d=DirectedGraphQ[g], vc=VertexCount[g]},
+      RObject[
+        Replace[ List@@Join@@EdgeList[g], Dispatch@Thread[VertexList[g] -> Range[vc]], {1} ],
+        RAttributes["mmaDirectedGraph" :> {d}, "mmaVertexCount" :> {vc}]]
     ],
   o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
   o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
@@ -43,7 +44,7 @@ iIGraph =
               args,
               function (x)
                 if (is.null(attr(x, 'mmaDirectedGraph', exact=T))) x
-                else graph.edgelist(x, directed=attr(x, 'mmaDirectedGraph'))
+                else graph(x, n=attr(x, 'mmaVertexCount'), directed=attr(x, 'mmaDirectedGraph'))
             )
     )
     if (is.igraph(res)) {

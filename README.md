@@ -38,7 +38,7 @@ InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources"];
 For Mathematica 10.0.1, it is also necessary to specify the R version, e.g.:
 
 ```
-InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources", "RVersion" -> "3.1"];
+InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources", "RVersion" -> 3];
 ```
 
 Verify that the expected version of R is being used with

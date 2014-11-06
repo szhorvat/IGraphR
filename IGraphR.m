@@ -34,10 +34,11 @@ RDataTypeRegister["IGraphEdgeList",
       ,
       Message[IGraph::mixed]; $Failed
       ,
-      With[{d=DirectedGraphQ[g], vc=VertexCount[g]},
+      With[{d=DirectedGraphQ[g], vc=VertexCount[g], names=ToString /@ VertexList[g]},
         RObject[
           Replace[ List@@Join@@EdgeList[g], Dispatch@Thread[VertexList[g] -> Range[vc]], {1} ],
-          RAttributes["mmaDirectedGraph" :> {d}, "mmaVertexCount" :> {vc}]]
+          RAttributes["mmaDirectedGraph" :> {d}, "mmaVertexCount" :> {vc}, "mmaVertexNames" :> names]
+        ]
       ]
     ],
   o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
@@ -60,13 +61,18 @@ iIGraph =
               args,
               function (x)
                 if (is.null(attr(x, 'mmaDirectedGraph', exact=T))) x
-                else graph(x, n=attr(x, 'mmaVertexCount'), directed=attr(x, 'mmaDirectedGraph'))
+                else {
+                  g <- graph(x, n=attr(x, 'mmaVertexCount'), directed=attr(x, 'mmaDirectedGraph'))
+                  V(g)$name <- attr(x, 'mmaVertexNames')
+                  g
+                }
             )
     )
     if (is.igraph(res)) {
       el <- as.integer(get.edgelist(res, names=F))
       attr(el, 'mmaDirectedGraph') <- is.directed(res)
       attr(el, 'mmaVertexCount') <- vcount(res)
+      attr(el, 'mmaVertexNames') <- get.vertex.attribute(res, 'name')
       el
     }
     else res

@@ -1,5 +1,12 @@
 (* ::Package:: *)
 
+(* :Title:   IGraphR          *)
+(* :Context: IGraphR`         *)
+(* :Author:  Szabolcs Horvát  *)
+
+(* :Package Version:     0.2  *)
+(* :Mathematica Version: 9.0  *)
+
 BeginPackage["IGraphR`", {"RLink`"}]
 
 IGraph::usage = "IGraph[\"fun\"] is a callable object representing an igraph function.  Graph objects in arguments are automatically converted.  Examples: IGraph[\"\"][CycleGraph[5]]"

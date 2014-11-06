@@ -4,12 +4,14 @@
 (* :Context: IGraphR`         *)
 (* :Author:  Szabolcs Horvát  *)
 
-(* :Package Version:     0.2  *)
+(* :Package Version:     0.3  *)
 (* :Mathematica Version: 9.0  *)
 
 BeginPackage["IGraphR`", {"RLink`"}]
 
 IGraph::usage = "IGraph[\"fun\"] is a callable object representing an igraph function.  Graph objects in arguments are automatically converted."
+
+`Information`$Version = "0.3"
 
 Begin["`Private`"]
 
@@ -34,16 +36,21 @@ RDataTypeRegister["IGraphEdgeList",
       ,
       Message[IGraph::mixed]; $Failed
       ,
-      With[{d=DirectedGraphQ[g], vc=VertexCount[g], names=ToString /@ VertexList[g]},
+      With[{
+        d = DirectedGraphQ[g],
+        vc = VertexCount[g],
+        names = ToString /@ VertexList[g],
+        weights = If[WeightedGraphQ[g], N@PropertyValue[g, EdgeWeight], Null]}
+        ,
         RObject[
           Replace[ List@@Join@@EdgeList[g], Dispatch@Thread[VertexList[g] -> Range[vc]], {1} ],
-          RAttributes["mmaDirectedGraph" :> {d}, "mmaVertexCount" :> {vc}, "mmaVertexNames" :> names]
+          RAttributes["mmaDirectedGraph" :> {d}, "mmaVertexCount" :> {vc}, "mmaVertexNames" :> names, "mmaEdgeWeights" :> weights]
         ]
       ]
     ],
   o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
   o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
-    Module[{vertices, edges, names},
+    Module[{vertices, edges, names, weights},
       names = RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexNames"];
       If[names === $Failed,
         vertices = Range@First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexCount"];
@@ -53,9 +60,11 @@ RDataTypeRegister["IGraphEdgeList",
         edges = Partition[names[[data]], 2];
       ];
 
-      If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"],
-        Graph[vertices, DirectedEdge @@@ edges],
-        Graph[vertices, UndirectedEdge @@@ edges]
+      edges = If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"], DirectedEdge, UndirectedEdge] @@@ edges;
+      weights = RLink`RDataTypeTools`RExtractAttribute[o, "mmaEdgeWeights"];
+      If[weights === $Failed,
+        Graph[vertices, edges],
+        Graph[vertices, edges, EdgeWeight -> weights]
       ]
     ]
 ]
@@ -70,6 +79,7 @@ iIGraph =
                 else {
                   g <- graph(x, n=attr(x, 'mmaVertexCount'), directed=attr(x, 'mmaDirectedGraph'))
                   V(g)$name <- attr(x, 'mmaVertexNames')
+                  if (!is.null(attr(x, 'mmaEdgeWeights', exact=T))) E(g)$weight <- attr(x, 'mmaEdgeWeights')
                   g
                 }
             )
@@ -79,6 +89,7 @@ iIGraph =
       attr(el, 'mmaDirectedGraph') <- is.directed(res)
       attr(el, 'mmaVertexCount') <- vcount(res)
       attr(el, 'mmaVertexNames') <- get.vertex.attribute(res, 'name')
+      attr(el, 'mmaEdgeWeights') <- get.edge.attribute(res, 'weight')
       el
     }
     else res

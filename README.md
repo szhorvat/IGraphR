@@ -63,10 +63,6 @@ In[]:= IGraph["barabasi.game"][10]
 Out[]= --Graph--
 ```
 
-###Known issues
-
-Only graphs whose vertices are named as 1, 2, 3, … are supported.
-
 ###Licensing
 
 This package is provided under the [MIT license](http://opensource.org/licenses/mit-license.html).  See `LICENSE.txt` for details.

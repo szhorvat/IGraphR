@@ -9,7 +9,7 @@ Module[{source},
     $Failed
   ];
   If[source =!= $Failed,
-    Export[FileNameJoin[{$UserBaseDirectory, "Applications", "IGraphR.m"}], source, "Text"],
+    Print["Installed to ", Export[FileNameJoin[{$UserBaseDirectory, "Applications", "IGraphR.m"}], source, "Text"]],
     Print["Failed to download IGraphR"]
   ]
 ]

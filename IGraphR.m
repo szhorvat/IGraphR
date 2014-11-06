@@ -69,7 +69,7 @@ iIGraph =
             )
     )
     if (is.igraph(res)) {
-      el <- as.integer(get.edgelist(res, names=F))
+      el <- as.integer(t(get.edgelist(res, names=F)))
       attr(el, 'mmaDirectedGraph') <- is.directed(res)
       attr(el, 'mmaVertexCount') <- vcount(res)
       attr(el, 'mmaVertexNames') <- get.vertex.attribute(res, 'name')

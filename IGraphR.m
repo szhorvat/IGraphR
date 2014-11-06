@@ -43,10 +43,16 @@ RDataTypeRegister["IGraphEdgeList",
     ],
   o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
   o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
-    With[
-      {vertices = Range@First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexCount"],
-       edges = Partition[data, 2]}
-      ,
+    Module[{vertices, edges, names},
+      names = RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexNames"];
+      If[names === $Failed,
+        vertices = Range@First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaVertexCount"];
+        edges = Partition[data, 2]
+        ,
+        vertices = names;
+        edges = Partition[names[[data]], 2];
+      ];
+
       If[First@RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"],
         Graph[vertices, DirectedEdge @@@ edges],
         Graph[vertices, UndirectedEdge @@@ edges]

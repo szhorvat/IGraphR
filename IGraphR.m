@@ -9,8 +9,7 @@
 
 BeginPackage["IGraphR`", {"RLink`"}]
 
-IGraph::usage = "IGraph[\"fun\"] is a callable object representing an igraph function.  Graph objects in arguments are automatically converted.  Examples: IGraph[\"\"][CycleGraph[5]]"
-IGraph::igraph = "igraph is not available.  Make sure you are using an R installation that has the igraph package installed"
+IGraph::usage = "IGraph[\"fun\"] is a callable object representing an igraph function.  Graph objects in arguments are automatically converted."
 
 Begin["`Private`"]
 
@@ -23,13 +22,23 @@ Check[
   Abort[]
 ]
 
+
+IGraph::igraph = "igraph is not available.  Make sure you are using an R installation that has the igraph package installed."
+IGraph::mixed = "Mixed graphs are not supported."
+
+
 RDataTypeRegister["IGraphEdgeList",
-  _?GraphQ,
+  g_?GraphQ,
   g_?GraphQ :>
-    With[{d=DirectedGraphQ[g], vc=VertexCount[g]},
-      RObject[
-        Replace[ List@@Join@@EdgeList[g], Dispatch@Thread[VertexList[g] -> Range[vc]], {1} ],
-        RAttributes["mmaDirectedGraph" :> {d}, "mmaVertexCount" :> {vc}]]
+    If[TrueQ@MixedGraphQ[g] (* TrueQ is to keep this v9-compatible; note v9 doesn't have MixedGraphQ defined *)
+      ,
+      Message[IGraph::mixed]; $Failed
+      ,
+      With[{d=DirectedGraphQ[g], vc=VertexCount[g]},
+        RObject[
+          Replace[ List@@Join@@EdgeList[g], Dispatch@Thread[VertexList[g] -> Range[vc]], {1} ],
+          RAttributes["mmaDirectedGraph" :> {d}, "mmaVertexCount" :> {vc}]]
+      ]
     ],
   o_RObject /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed),
   o:RObject[data_, _RAttributes] /; (RLink`RDataTypeTools`RExtractAttribute[o, "mmaDirectedGraph"] =!= $Failed) :>
@@ -64,8 +73,14 @@ iIGraph =
   }"];
 
 IGraph[fun_String][args___] :=
-    iIGraph[RFunction[fun],
-        ToRForm[ToRForm /@ {args}]
+    Module[{rargs},
+      rargs = Check[ToRForm /@ {args}, $Failed];
+      If[rargs =!= $Failed,
+        iIGraph[RFunction[fun],
+            ToRForm[rargs]
+        ],
+        $Failed
+      ]
     ]
 
 

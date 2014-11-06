@@ -7,7 +7,13 @@ See a short IGraphR tutorial [here](http://www3.nd.edu/~szhorvat/pelican/using-i
 
 ###Installation
 
-Drop `IGraphR.m` into the directory opened by this command:
+**Easy automatic install:**
+
+Just evaluate `Get["https://raw.githubusercontent.com/szhorvat/IGraphR/master/install.m"]`.  It will install into `$UserBaseDirectory` and overwrite any old versions there.
+
+**Manual installation:**
+
+[Download `IGraphR.m`](https://raw.githubusercontent.com/szhorvat/IGraphR/master/IGraphR.m) and drop it into the directory opened by this command:
 
     SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]
     
@@ -61,7 +67,17 @@ Out[]= {2.}
 
 In[]:= IGraph["barabasi.game"][10]
 Out[]= --Graph--
+
+In[]:= IGraph["plot"][Graph[{a <-> b, b <-> c}]]
 ```
+
+###Limitations
+
+Mathematica 10 supports mixed graphs which have both directed and undirected edges.  These are not supported by igraph or IGraphR.
+
+###Support
+
+If you encounter any problems with IGraphR, send a mail to `szhorvat` at `gmail.com`.
 
 ###Licensing
 

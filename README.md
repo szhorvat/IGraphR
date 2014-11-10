@@ -25,35 +25,7 @@ First, make sure that you are using an R installation that has the igraph packag
 
     REvaluate["install.packages('igraph')"]
     
-**On OS X**, you'll need to use an external R installation.  First, [download and install the official R distribution](http://www.r-project.org/) (other distributions may or may not work with RLink).  Start it up and install igraph using the R command `install.packages('igraph')`.  Then in Mathematica load RLink and connect to the external R version *before* you load ``IGraphR` ``:
-
-```
-Needs["RLink`"]
-
-SetEnvironment[
- "DYLD_LIBRARY_PATH" -> 
-  "/Library/Frameworks/R.framework/Resources/lib"];
-```
-
-For Mathematica 9.0.1 and 10.0.0, use
-
-```
-InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources"];
-```
-
-For Mathematica 10.0.1, it is also necessary to specify the R version, e.g.:
-
-```
-InstallR["RHomeLocation" -> "/Library/Frameworks/R.framework/Resources", "RVersion" -> 3];
-```
-
-Verify that the expected version of R is being used with
-
-```
-REvaluate["R.version.string"]
-```
-
-(more information [here](http://mathematica.stackexchange.com/a/43732/12))
+**On OS X** and **Linux** it is necessary to use an external R installation.  See [this guide](http://www.nd.edu/~szhorvat/pelican/setting-up-rlink-for-mathematica.html) on how to do that.
 
 Now you are ready to load ``IGraphR` ``:
 

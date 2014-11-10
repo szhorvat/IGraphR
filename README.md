@@ -25,9 +25,9 @@ First, make sure that you are using an R installation that has the igraph packag
 
     REvaluate["install.packages('igraph')"]
     
-**On OS X** and **Linux** it is necessary to use an external R installation.  See [this guide](http://www.nd.edu/~szhorvat/pelican/setting-up-rlink-for-mathematica.html) on how to do that.
+**On OS X** and **Linux** it is necessary to use an external R installation.  See [this guide](http://www.nd.edu/~szhorvat/pelican/setting-up-rlink-for-mathematica.html) on how to do that.  Run the R version you are using outside of Mathematica and run `install.packages('igraph')` to install the igraph package into it.
 
-Now you are ready to load ``IGraphR` ``:
+Now you are ready to load ``IGraphR` `` in Mathematica:
 
     Needs["IGraphR`"]
 

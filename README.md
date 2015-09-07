@@ -51,6 +51,10 @@ Mathematica 10 supports mixed graphs which have both directed and undirected edg
 
 If you encounter any problems with IGraphR, send a mail to `szhorvat` at `gmail.com`.
 
+### Related software
+
+[IGraph/M](https://github.com/szhorvat/IGraphM) is a more advanced but less complete Mathematica interface to igraph.  I recommend using [IGraph/M](https://github.com/szhorvat/IGraphM) when it has the functions you need.
+
 ### Licensing
 
 This package is provided under the [MIT license](http://opensource.org/licenses/mit-license.html).  See `LICENSE.txt` for details.

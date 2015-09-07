@@ -4,29 +4,32 @@
 (* :Context: IGraphR`         *)
 (* :Author:  Szabolcs Horvát  *)
 
-(* :Package Version:     0.3  *)
-(* :Mathematica Version: 9.0  *)
+(* :Package Version:     0.3.1 *)
+(* :Mathematica Version: 9.0   *)
 
 BeginPackage["IGraphR`", {"RLink`"}]
 
 IGraph::usage = "IGraph[\"fun\"] is a callable object representing an igraph function.  Graph objects in arguments are automatically converted."
 
-`Information`$Version = "0.3"
+`Information`$Version = "0.3.1"
 
 Begin["`Private`"]
 
+IGraph::igraph = "igraph is not available.  Make sure you are using an R installation that has the igraph package installed."
+IGraph::mixed = "Mixed graphs are not supported."
+
+packageAbort[] := (End[]; EndPackage[]; Abort[])
 
 Check[
   InstallR[];
   REvaluate["library(igraph)"]
   ,
   Message[IGraph::igraph];
-  Abort[]
+  packageAbort[]
 ]
 
 
-IGraph::igraph = "igraph is not available.  Make sure you are using an R installation that has the igraph package installed."
-IGraph::mixed = "Mixed graphs are not supported."
+weightedGraphQ = WeightedGraphQ[#] && PropertyValue[#, EdgeList] =!= Automatic &;
 
 
 RDataTypeRegister["IGraphEdgeList",
@@ -40,7 +43,7 @@ RDataTypeRegister["IGraphEdgeList",
         d = DirectedGraphQ[g],
         vc = VertexCount[g],
         names = ToString /@ VertexList[g],
-        weights = If[WeightedGraphQ[g], N@PropertyValue[g, EdgeWeight], Null]}
+        weights = If[weightedGraphQ[g], N@PropertyValue[g, EdgeWeight], Null]}
         ,
         RObject[
           Replace[ List@@Join@@EdgeList[g], Dispatch@Thread[VertexList[g] -> Range[vc]], {1} ],

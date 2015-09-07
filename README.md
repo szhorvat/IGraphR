@@ -5,7 +5,7 @@ Call [igraph](http://igraph.org/) with ease from Mathematica through [RLink](htt
 
 See a short IGraphR tutorial [here](http://www3.nd.edu/~szhorvat/pelican/using-igraph-from-mathematica.html).
 
-###Installation
+### Installation
 
 **Easy automatic install:**
 
@@ -17,7 +17,7 @@ Just evaluate `Get["https://raw.githubusercontent.com/szhorvat/IGraphR/master/in
 
     SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]
     
-###Loading
+### Loading
 
 First, make sure that you are using an R installation that has the igraph package.  
 
@@ -31,7 +31,7 @@ Now you are ready to load ``IGraphR` `` in Mathematica:
 
     Needs["IGraphR`"]
 
-###Examples
+### Examples
 
 ```
 In[]:= IGraph["vertex.connectivity"][CycleGraph[5]]
@@ -43,14 +43,14 @@ Out[]= --Graph--
 In[]:= IGraph["plot"][Graph[{a <-> b, b <-> c}]]
 ```
 
-###Limitations
+### Limitations
 
 Mathematica 10 supports mixed graphs which have both directed and undirected edges.  These are not supported by igraph or IGraphR.
 
-###Support
+### Support
 
 If you encounter any problems with IGraphR, send a mail to `szhorvat` at `gmail.com`.
 
-###Licensing
+### Licensing
 
 This package is provided under the [MIT license](http://opensource.org/licenses/mit-license.html).  See `LICENSE.txt` for details.
